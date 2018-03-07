@@ -69,7 +69,7 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
                                      ssd_anchors,
                                      select_threshold=select_threshold,
                                      img_shape=net_shape,
-                                     num_classes=80,
+                                     num_classes=21,
                                      decode=True)
 
     rbboxes = np_methods.bboxes_clip(rbbox_img, rbboxes)
