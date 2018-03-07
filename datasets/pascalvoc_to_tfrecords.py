@@ -80,7 +80,7 @@ def _process_image(directory, name):
     """
     # Read the image file.
     filename = directory + DIRECTORY_IMAGES + name + '.jpg'
-    image_data = tf.gfile.FastGFile(filename, 'r').read()
+    image_data = tf.gfile.FastGFile(filename, 'rb').read()
 
     # Read the XML annotation file.
     filename = os.path.join(directory, DIRECTORY_ANNOTATIONS, name + '.xml')
@@ -101,7 +101,7 @@ def _process_image(directory, name):
     for obj in root.findall('object'):
         label = obj.find('name').text
         labels.append(int(VOC_LABELS[label][0]))
-        labels_text.append(label.encode('ascii'))
+        labels_text.append(label.encode('utf-8'))
 
         if obj.find('difficult'):
             difficult.append(int(obj.find('difficult').text))

@@ -24,7 +24,11 @@ from datasets import imagenet
 from datasets import pascalvoc_2007
 from datasets import pascalvoc_2012
 
+from datasets import coco_2017
+
+
 datasets_map = {
+    'coco_2017': coco_2017,
     'cifar10': cifar10,
     'imagenet': imagenet,
     'pascalvoc_2007': pascalvoc_2007,

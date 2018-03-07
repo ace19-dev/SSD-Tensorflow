@@ -83,7 +83,7 @@ SPLITS_TO_STATISTICS = {
     'train': TRAIN_STATISTICS,
     'test': TEST_STATISTICS,
 }
-NUM_CLASSES = 20
+NUM_CLASSES = 21
 
 
 def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
