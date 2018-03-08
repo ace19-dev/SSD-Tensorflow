@@ -13,18 +13,14 @@
 # limitations under the License.
 # ==============================================================================
 """Provides data for the ImageNet ILSVRC 2012 Dataset plus some bounding boxes.
-
 Some images have one or more bounding boxes associated with the label of the
 image. See details here: http://image-net.org/download-bboxes
-
 ImageNet is based upon WordNet 3.0. To uniquely identify a synset, we use
 "WordNet ID" (wnid), which is a concatenation of POS ( i.e. part of speech )
 and SYNSET OFFSET of WordNet. For more information, please refer to the
 WordNet documentation[http://wordnet.princeton.edu/wordnet/documentation/].
-
 "There are bounding boxes for over 3000 popular synsets available.
 For each synset, there are on average 150 images with bounding boxes."
-
 WARNING: Don't use for object detection, in this case all the bounding boxes
 of the image belong to just one class.
 """
@@ -44,8 +40,10 @@ slim = tf.contrib.slim
 _FILE_PATTERN = '%s-*'
 
 _SPLITS_TO_SIZES = {
-    'train': 1281167,
-    'validation': 50000,
+#    'train': 1281167,
+    'train': 544546,
+#    'validation': 50000,
+    'validation': 500,
 }
 
 _ITEMS_TO_DESCRIPTIONS = {
@@ -61,11 +59,9 @@ _NUM_CLASSES = 1001
 
 def create_readable_names_for_imagenet_labels():
     """Create a dict mapping label id to human readable string.
-
     Returns:
             labels_to_names: dictionary where keys are integers from to 1000
             and values are human-readable names.
-
     We retrieve a synset file, which contains a list of valid synset labels used
     by ILSVRC competition. There is one synset one per line, eg.
                     #   n01440764
@@ -77,23 +73,18 @@ def create_readable_names_for_imagenet_labels():
                     #   n02119359    silver fox
     We assign each synset (in alphabetical order) an integer, starting from 1
     (since 0 is reserved for the background class).
-
     Code is based on
     https://github.com/tensorflow/models/blob/master/inception/inception/data/build_imagenet_data.py#L463
     """
 
     # pylint: disable=g-line-too-long
-    base_url = 'https://raw.githubusercontent.com/tensorflow/models/master/inception/inception/data/'
-    synset_url = '{}/imagenet_lsvrc_2015_synsets.txt'.format(base_url)
-    synset_to_human_url = '{}/imagenet_metadata.txt'.format(base_url)
 
-    filename, _ = urllib.request.urlretrieve(synset_url)
-    synset_list = [s.strip() for s in open(filename).readlines()]
+
+    synset_list = [s.strip() for s in open('/mnt/disk2/imagenet-data/imagenet_lsvrc_2015_synsets.txt').readlines()]
     num_synsets_in_ilsvrc = len(synset_list)
     assert num_synsets_in_ilsvrc == 1000
 
-    filename, _ = urllib.request.urlretrieve(synset_to_human_url)
-    synset_to_human_list = open(filename).readlines()
+    synset_to_human_list = open('/mnt/disk2/imagenet-data/imagenet_metadata.txt').readlines()
     num_synsets_in_all_imagenet = len(synset_to_human_list)
     assert num_synsets_in_all_imagenet == 21842
 
@@ -117,7 +108,6 @@ def create_readable_names_for_imagenet_labels():
 
 def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
     """Gets a dataset tuple with instructions for reading ImageNet.
-
     Args:
         split_name: A train/test split name.
         dataset_dir: The base directory of the dataset sources.
@@ -125,10 +115,8 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
             It is assumed that the pattern contains a '%s' string so that the split
             name can be inserted.
         reader: The TensorFlow reader type.
-
     Returns:
         A `Dataset` namedtuple.
-
     Raises:
         ValueError: if `split_name` is not a valid train/test split.
     """
@@ -144,15 +132,27 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
         reader = tf.TFRecordReader
 
     keys_to_features = {
-        'image/encoded': tf.FixedLenFeature((), tf.string, default_value=''),
-        'image/format': tf.FixedLenFeature((), tf.string, default_value='jpeg'),
-        'image/class/label': tf.FixedLenFeature([], dtype=tf.int64, default_value=-1),
-        'image/class/text': tf.FixedLenFeature([], dtype=tf.string, default_value=''),
-        'image/object/bbox/xmin': tf.VarLenFeature(dtype=tf.float32),
-        'image/object/bbox/ymin': tf.VarLenFeature(dtype=tf.float32),
-        'image/object/bbox/xmax': tf.VarLenFeature(dtype=tf.float32),
-        'image/object/bbox/ymax': tf.VarLenFeature(dtype=tf.float32),
-        'image/object/class/label': tf.VarLenFeature(dtype=tf.int64),
+        'image/encoded': tf.FixedLenFeature(
+                (), tf.string, default_value=''),
+        'image/format': tf.FixedLenFeature(
+                (), tf.string, default_value='jpeg'),
+        'image/class/label': tf.VarLenFeature(
+                dtype=tf.int64),
+        'image/class/text': tf.FixedLenFeature(
+                [], dtype=tf.string, default_value=''),
+        'image/object/bbox/xmin': tf.VarLenFeature(
+                dtype=tf.float32),
+        'image/object/bbox/ymin': tf.VarLenFeature(
+                dtype=tf.float32),
+        'image/object/bbox/xmax': tf.VarLenFeature(
+                dtype=tf.float32),
+        'image/object/bbox/ymax': tf.VarLenFeature(
+                dtype=tf.float32),
+        'image/object/class/label': tf.VarLenFeature(
+                dtype=tf.int64),
+        'image/object/bbox/label': tf.VarLenFeature(
+            dtype=tf.int64),
+
     }
 
     items_to_handlers = {
@@ -161,7 +161,7 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
         'label_text': slim.tfexample_decoder.Tensor('image/class/text'),
         'object/bbox': slim.tfexample_decoder.BoundingBox(
                 ['ymin', 'xmin', 'ymax', 'xmax'], 'image/object/bbox/'),
-        'object/label': slim.tfexample_decoder.Tensor('image/object/class/label'),
+        'object/label': slim.tfexample_decoder.Tensor('image/object/bbox/label'),
     }
 
     decoder = slim.tfexample_decoder.TFExampleDecoder(
