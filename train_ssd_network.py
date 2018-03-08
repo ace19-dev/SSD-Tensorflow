@@ -158,7 +158,7 @@ tf.app.flags.DEFINE_integer('max_number_of_steps', None,
 # Fine-Tuning Flags.
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
-    'checkpoint_path', None,
+    'checkpoint_path', './checkpoints/tfmodel/',
     'The path to a checkpoint from which to fine-tune.')
 tf.app.flags.DEFINE_string(
     'checkpoint_model_scope', None,
@@ -230,8 +230,8 @@ def main(_):
                     shuffle=True)
             # Get for SSD network: image, labels, bboxes.
             [image, glabels, gbboxes] = provider.get(['image',
-                                                             'object/label',
-                                                             'object/bbox'])
+                                                      'object/label',
+                                                      'object/bbox'])
             # Pre-processing image, labels and bboxes.
             image, glabels, gbboxes = \
                 image_preprocessing_fn(image, glabels, gbboxes,
