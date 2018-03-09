@@ -82,7 +82,7 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
 
 # Test on some demo image and visualize output.
 # path = './demo/voc2012/2009_003496.jpg'
-path = './demo/coco/'
+path = './test_image/coco/'
 image_names = sorted(os.listdir(path))
 
 for image in image_names:
