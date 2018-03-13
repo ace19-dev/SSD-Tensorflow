@@ -45,8 +45,8 @@ with slim.arg_scope(ssd_net.arg_scope(data_format=data_format)):
 
 # Restore SSD model.
 # ckpt_filename = './checkpoints/ssd_300_vgg.ckpt'
-# ckpt_filename = './checkpoints/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt'
-ckpt_filename = './checkpoints/tfmodel/model.ckpt-101551'
+ckpt_filename = './checkpoints/tfmodel/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt'
+# ckpt_filename = './checkpoints/tfmodel/model.ckpt-201126'
 isess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
 saver.restore(isess, ckpt_filename)
@@ -82,7 +82,7 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
 
 # Test on some demo image and visualize output.
 # path = './demo/voc2012/2009_003496.jpg'
-path = './test_image/coco/'
+path = './test_image/voc2012/'
 image_names = sorted(os.listdir(path))
 
 for image in image_names:

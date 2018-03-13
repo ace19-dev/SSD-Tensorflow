@@ -43,7 +43,7 @@ def read_tfrecords(tfrecords_filename, is_train_val=False):
 
 # save to file
 def save_to_file():
-    with open('train/labels.txt', 'w') as f_labels:
+    with open('train/labels_coco.txt', 'w') as f_labels:
         for idx, img, label in read_tfrecords('./train.tfrecords', is_train_val=True):
             fn = 'train/{}.png'.format(idx)
             with open(fn, 'wb') as f_img:
