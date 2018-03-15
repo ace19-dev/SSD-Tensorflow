@@ -24,7 +24,7 @@ import tarfile
 from six.moves import urllib
 import tensorflow as tf
 
-LABELS_FILENAME = 'labels.txt'
+LABELS_FILENAME = 'labels_coco.txt'
 
 
 def int64_feature(value):

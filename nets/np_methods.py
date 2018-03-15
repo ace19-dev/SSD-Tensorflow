@@ -58,7 +58,7 @@ def ssd_bboxes_select_layer(predictions_layer,
                             anchors_layer,
                             select_threshold=0.5,
                             img_shape=(300, 300),
-                            num_classes=21,
+                            num_classes=81,
                             decode=True):
     """Extract classes, scores and bounding boxes from features in one layer.
 
@@ -102,7 +102,7 @@ def ssd_bboxes_select(predictions_net,
                       anchors_net,
                       select_threshold=0.5,
                       img_shape=(300, 300),
-                      num_classes=21,
+                      num_classes=81,
                       decode=True):
     """Extract classes, scores and bounding boxes from network output layers.
 

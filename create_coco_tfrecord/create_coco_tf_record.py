@@ -31,7 +31,7 @@ import tensorflow as tf
 import logging
 
 
-SAMPLES_PER_FILES = 1024
+SAMPLES_PER_FILES = 512
 
 # from object_detection.utils import dataset_util
 
@@ -42,16 +42,31 @@ flags.DEFINE_string('data_dir',
 flags.DEFINE_string('set',
                     'train',    # 118287
                     'Convert training set or validation set')
-flags.DEFINE_string('output_dir',
-                    '/home/ace19/dl-data/COCO/tfrecord',
-                    'Path to output TFRecord')
 # flags.DEFINE_string('output_dir',
-#                      '/home/ace19/dl-data/COCO/coco_val2017.tfrecord',
-#                      'Path to output TFRecord')
+#                     '/home/ace19/dl-data/COCO/tfrecord',
+#                     'Path to output TFRecord')
+flags.DEFINE_string('output_dir',
+                    '/home/ace19/dl-data/COCO/fine-tuning_tfrecord',
+                    'Path to reindexing output TFRecord')
 flags.DEFINE_bool('shuffle_imgs',
                   True,
                   'whether to shuffle images of coco')
 FLAGS = flags.FLAGS
+
+# before fine tuning with coco 80 class, we must re-index of class
+# old index:new index
+fine_tuning_new_label = {
+    1:15, 2:2, 3:7, 4:14, 5:1, 6:6, 7:19, 8:91, 9:4, 10:92,
+    11:93, 13:94, 14:95, 15:96, 16:3, 17:8, 18:12, 19:13, 20:17, 21:10,
+    22:22, 23:23, 24:24, 25:25, 27:27, 28:28, 31:31, 32:32, 33:33, 34:34,
+    35:35, 36:36, 37:37, 38:38, 39:39, 40:40, 41:41, 42:42, 43:43, 44:5,
+    46:46, 47:47, 48:48, 49:49, 50:50, 51:51, 52:52, 53:53, 54:54, 55:55,
+    56:56, 57:57, 58:58, 59:59, 60:60, 61:61, 62:9, 63:18, 64:16, 65:65,
+    67:11, 70:70, 72:20, 73:73, 74:74, 75:75, 76:76, 77:77, 78:78, 79:79,
+    80:80, 81:81, 82:82, 84:84, 85:85, 86:86, 87:87, 88:88, 89:89, 90:90
+}
+
+
 
 def _int64_feature(value):
     """Wrapper for inserting int64 features into Example proto."""
@@ -113,7 +128,10 @@ def load_coco_dection_dataset(imgs_dir, annotations_filepath, shuffle_img = True
                                   bboxes_data[2]/float(pic_width), bboxes_data[3]/float(pic_height)]
                          # the format of coco bounding boxs is [Xmin, Ymin, width, height]
             bboxes.append(bboxes_data)
-            labels.append(ann['category_id'])
+            # original coco
+            # labels.append(ann['category_id'])
+            # fine tuning with pre-trained checkpoint file so need to reindex
+            labels.append(fine_tuning_new_label[ann['category_id']])
             # labels_text.append(cats_text.get(ann['category_id']).encode('utf-8'))
 
 
