@@ -11,6 +11,9 @@ slim = tf.contrib.slim
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 import sys
 sys.path.append('../')
 
