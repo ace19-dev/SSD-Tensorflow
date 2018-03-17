@@ -53,9 +53,9 @@ flags.DEFINE_bool('shuffle_imgs',
                   'whether to shuffle images of coco')
 FLAGS = flags.FLAGS
 
-# before fine tuning with coco 80 class, we must re-index of class
+# Before fine tuning with 80 class of coco dataset, we must re-index of class.
 # old index:new index
-fine_tuning_new_label = {
+new_label_for_fine_tuning = {
     1:15, 2:2, 3:7, 4:14, 5:1, 6:6, 7:19, 8:91, 9:4, 10:92,
     11:93, 13:94, 14:95, 15:96, 16:3, 17:8, 18:12, 19:13, 20:17, 21:10,
     22:22, 23:23, 24:24, 25:25, 27:27, 28:28, 31:31, 32:32, 33:33, 34:34,
@@ -65,7 +65,6 @@ fine_tuning_new_label = {
     67:11, 70:70, 72:20, 73:73, 74:74, 75:75, 76:76, 77:77, 78:78, 79:79,
     80:80, 81:81, 82:82, 84:84, 85:85, 86:86, 87:87, 88:88, 89:89, 90:90
 }
-
 
 
 def _int64_feature(value):
@@ -131,7 +130,7 @@ def load_coco_dection_dataset(imgs_dir, annotations_filepath, shuffle_img = True
             # original coco
             # labels.append(ann['category_id'])
             # fine tuning with pre-trained checkpoint file so need to reindex
-            labels.append(fine_tuning_new_label[ann['category_id']])
+            labels.append(new_label_for_fine_tuning[ann['category_id']])
             # labels_text.append(cats_text.get(ann['category_id']).encode('utf-8'))
 
 
