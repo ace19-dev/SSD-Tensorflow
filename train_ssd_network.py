@@ -97,7 +97,7 @@ tf.app.flags.DEFINE_float(
 tf.app.flags.DEFINE_float(
     'ftrl_l2', 0.0, 'The FTRL l2 regularization strength.')
 tf.app.flags.DEFINE_float(
-    'momentum', 0.95,
+    'momentum', 0.99,
     'The momentum for the MomentumOptimizer and RMSPropOptimizer.')
 tf.app.flags.DEFINE_float('rmsprop_momentum', 0.9, 'Momentum.')
 tf.app.flags.DEFINE_float('rmsprop_decay', 0.9, 'Decay term for RMSProp.')
@@ -110,9 +110,9 @@ tf.app.flags.DEFINE_string(
     'exponential',
     'Specifies how the learning rate is decayed. One of "fixed", "exponential",'
     ' or "polynomial"')
-tf.app.flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
+tf.app.flags.DEFINE_float('learning_rate', 0.0005, 'Initial learning rate.')
 tf.app.flags.DEFINE_float(
-    'end_learning_rate', 0.0001,
+    'end_learning_rate', 0.00001,
     'The minimal end learning rate used by a polynomial decay learning rate.')
 tf.app.flags.DEFINE_float(
     'label_smoothing', 0.0, 'The amount of label smoothing.')
@@ -130,15 +130,24 @@ tf.app.flags.DEFINE_float(
 # Dataset Flags.
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
-    'dataset_name', 'coco_2017', 'The name of the dataset to load.')
+    'dataset_name',
+    'coco_2017',
+    'The name of the dataset to load.')
 tf.app.flags.DEFINE_integer(
-    'num_classes', 81, 'Number of classes to use in the dataset.')
+    'num_classes',
+    81,
+    'Number of classes to use in the dataset.')
 tf.app.flags.DEFINE_string(
-    'dataset_split_name', 'train', 'The name of the train/test split.')
+    'dataset_split_name',
+    'train',
+    'The name of the train/test split.')
 tf.app.flags.DEFINE_string(
-    'dataset_dir', '/home/ace19/dl-data/COCO/fine-tuning_tfrecord/', 'The directory where the dataset files are stored.')
+    'dataset_dir',
+    '/home/acemc19/dl-data/COCO/fine-tuning_tfrecord/',
+    'The directory where the dataset files are stored.')
 tf.app.flags.DEFINE_integer(
-    'labels_offset', 0,
+    'labels_offset',
+    0,
     'An offset for the labels in the dataset. This flag is primarily used to '
     'evaluate the VGG and ResNet architectures which do not use a background '
     'class for the ImageNet dataset.')
@@ -158,21 +167,28 @@ tf.app.flags.DEFINE_integer('max_number_of_steps', None,
 # Fine-Tuning Flags.
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
-    'checkpoint_path', './checkpoints/tfmodel/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt',
+    'checkpoint_path',
+    './checkpoints/tfmodel/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt',
     'The path to a checkpoint from which to fine-tune.')
 tf.app.flags.DEFINE_string(
-    'checkpoint_model_scope', None,
+    'checkpoint_model_scope',
+    None,
     'Model scope in the checkpoint. None if the same as the trained model.')
 tf.app.flags.DEFINE_string(
-    'checkpoint_exclude_scopes', None,
+    'checkpoint_exclude_scopes',
+    'ssd_300_vgg/block4_box/conv_cls, ssd_300_vgg/block7_box/conv_cls, \
+     ssd_300_vgg/block8_box/conv_cls, ssd_300_vgg/block9_box/conv_cls, \
+     ssd_300_vgg/block10_box/conv_cls, ssd_300_vgg/block11_box/conv_cls',
     'Comma-separated list of scopes of variables to exclude when restoring '
     'from a checkpoint.')
 tf.app.flags.DEFINE_string(
-    'trainable_scopes', None,
+    'trainable_scopes',
+    None,
     'Comma-separated list of scopes to filter the set of variables to train.'
     'By default, None would train all the variables.')
 tf.app.flags.DEFINE_boolean(
-    'ignore_missing_vars', False,
+    'ignore_missing_vars',
+    False,
     'When restoring a checkpoint would ignore missing variables.')
 
 FLAGS = tf.app.flags.FLAGS
