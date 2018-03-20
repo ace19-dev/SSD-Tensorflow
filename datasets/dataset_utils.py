@@ -24,7 +24,7 @@ import tarfile
 from six.moves import urllib
 import tensorflow as tf
 
-LABELS_FILENAME = 'labels_coco.txt'
+LABELS_FILENAME = 'new_coco_labels.txt'
 
 
 def int64_feature(value):
@@ -125,10 +125,31 @@ def read_label_file(dataset_dir, filename=LABELS_FILENAME):
     with tf.gfile.Open(labels_filename, 'rb') as f:
         lines = f.read()
     lines = lines.split(b'\n')
-    lines = filter(None, lines)
 
     labels_to_class_names = {}
     for line in lines:
         index = line.index(b':')
         labels_to_class_names[int(line[:index])] = line[index+1:]
+    return labels_to_class_names
+
+
+def read_label_file2(dataset_dir, filename=LABELS_FILENAME):
+    """Reads the labels file and returns a mapping from ID to class name.
+
+    Args:
+    dataset_dir: The directory in which the labels file is found.
+    filename: The filename where the class names are written.
+
+    Returns:
+    A map from a label (integer) to class name.
+    """
+    labels_filename = os.path.join(dataset_dir, filename)
+    with tf.gfile.Open(labels_filename, 'rb') as f:
+        lines = f.read()
+    lines = lines.splitlines()
+
+    labels_to_class_names = {}
+    for line in lines:
+        index = line.index(b':')
+        labels_to_class_names[int(line[:index])] = str(line[index+1:], 'utf-8')
     return labels_to_class_names
