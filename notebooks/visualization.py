@@ -109,7 +109,7 @@ def plt_bboxes(img, classes, scores, bboxes, labels_to_names, figsize=(10,10), l
             if len(labels_to_names) == 0:
                 class_name = str(cls_id)
             else:
-                class_name = labels_to_names[cls_id]
+                class_name = labels_to_names[cls_id] + '[' + str(cls_id) + ']'
 
             plt.gca().text(xmin, ymin - 2,
                            '{:s} | {:.3f}'.format(class_name, score),
