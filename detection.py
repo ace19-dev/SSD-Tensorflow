@@ -87,17 +87,15 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
     return rclasses, rscores, rbboxes
 
 
+dataset_dir = os.path.join(os.getcwd(), 'datasets')
+labels_to_names = None
+if dataset_utils.has_labels(dataset_dir):
+    labels_to_names = dataset_utils.read_label_file2(dataset_dir)
+
 # Test on some demo image and visualize output.
 # path = './demo/voc2012/2009_003496.jpg'
 path = './detection_image/coco/'
 image_names = sorted(os.listdir(path))
-
-
-dataset_dir = os.path.join(os.getcwd(), 'datasets')
-
-labels_to_names = None
-if dataset_utils.has_labels(dataset_dir):
-    labels_to_names = dataset_utils.read_label_file2(dataset_dir)
 
 for image in image_names:
     img = mpimg.imread(path + image)
