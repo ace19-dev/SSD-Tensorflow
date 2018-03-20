@@ -21,6 +21,9 @@ from nets import ssd_vgg_300, ssd_common, np_methods
 from preprocessing import ssd_vgg_preprocessing
 from notebooks import visualization
 
+from datasets import dataset_utils
+
+
 # TensorFlow session: grow memory when needed. TF, DO NOT USE ALL MY GPU MEMORY!!!
 gpu_options = tf.GPUOptions(allow_growth=True)
 config = tf.ConfigProto(log_device_placement=False, gpu_options=gpu_options)
@@ -49,8 +52,8 @@ with slim.arg_scope(ssd_net.arg_scope(data_format=data_format)):
 
 # Restore SSD model.
 # ckpt_filename = './checkpoints/ssd_300_vgg.ckpt'
-ckpt_filename = './checkpoints/tfmodel/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt'
-# ckpt_filename = './checkpoints/tfmodel/model.ckpt-116971'
+# ckpt_filename = './checkpoints/tfmodel/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt'
+ckpt_filename = './checkpoints/tfmodel/model.ckpt-158966'
 isess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
 saver.restore(isess, ckpt_filename)
@@ -89,10 +92,17 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
 path = './detection_image/coco/'
 image_names = sorted(os.listdir(path))
 
+
+dataset_dir = os.path.join(os.getcwd(), 'datasets')
+
+labels_to_names = None
+if dataset_utils.has_labels(dataset_dir):
+    labels_to_names = dataset_utils.read_label_file2(dataset_dir)
+
 for image in image_names:
     img = mpimg.imread(path + image)
     # img = mpimg.imread(path + image_names[-5])
     rclasses, rscores, rbboxes =  process_image(img)
 
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
-    visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
+    visualization.plt_bboxes(img, rclasses, rscores, rbboxes, labels_to_names)
