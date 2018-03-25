@@ -448,7 +448,7 @@ def ssd_net(inputs,
     # End_points collect relevant activations for external use.
     end_points = {}
     with tf.variable_scope(scope, 'ssd_300_vgg', [inputs], reuse=reuse):
-        # Original VGG-16 blocks.
+        ##############  Start Original VGG-16 blocks.
         net = slim.repeat(inputs, 2, slim.conv2d, 64, [3, 3], scope='conv1')
         end_points['block1'] = net
         net = slim.max_pool2d(net, [2, 2], scope='pool1')
@@ -468,6 +468,7 @@ def ssd_net(inputs,
         net = slim.repeat(net, 3, slim.conv2d, 512, [3, 3], scope='conv5')
         end_points['block5'] = net
         net = slim.max_pool2d(net, [3, 3], stride=1, scope='pool5')
+        ###############  End Original VGG-16 blocks.
 
         # Additional SSD blocks.
         # Block 6: let's dilate the hell out of it!
