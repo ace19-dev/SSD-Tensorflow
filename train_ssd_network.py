@@ -168,7 +168,7 @@ tf.app.flags.DEFINE_integer('max_number_of_steps', None,
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
     'checkpoint_path',
-    './checkpoints/tfmodel/model.ckpt-255368',
+    './checkpoints/tfmodel/model.ckpt-265915',
     'The path to a checkpoint from which to fine-tune.')
 tf.app.flags.DEFINE_string(
     'checkpoint_model_scope',
@@ -176,9 +176,9 @@ tf.app.flags.DEFINE_string(
     'Model scope in the checkpoint. None if the same as the trained model.')
 tf.app.flags.DEFINE_string(
     'checkpoint_exclude_scopes',
-    'ssd_300_vgg/block4_box/conv_cls, ssd_300_vgg/block7_box/conv_cls, \
-     ssd_300_vgg/block8_box/conv_cls, ssd_300_vgg/block9_box/conv_cls, \
-     ssd_300_vgg/block10_box/conv_cls, ssd_300_vgg/block11_box/conv_cls',
+    'ssd_300_vgg/block4_box, ssd_300_vgg/block7_box, \
+     ssd_300_vgg/block8_box, ssd_300_vgg/block9_box, \
+     ssd_300_vgg/block10_box, ssd_300_vgg/block11_box',
     'Comma-separated list of scopes of variables to exclude when restoring '
     'from a checkpoint.')
 tf.app.flags.DEFINE_string(
