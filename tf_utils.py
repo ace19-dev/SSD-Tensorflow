@@ -242,6 +242,7 @@ def get_variables_to_train(flags):
       A list of variables to train by the optimizer.
     """
     if flags.trainable_scopes is None:
+        print('>>> ', tf.trainable_variables())
         return tf.trainable_variables()
     else:
         scopes = [scope.strip() for scope in flags.trainable_scopes.split(',')]
