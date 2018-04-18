@@ -188,12 +188,13 @@ class SSDNet(object):
                                       self.params.anchor_offset,
                                       dtype)
 
-    def bboxes_encode(self, labels, bboxes, anchors,
-                      scope=None):
+    def bboxes_encode(self, labels, bboxes, anchors, scope=None):
         """Encode labels and bounding boxes.
         """
         return ssd_common.tf_ssd_bboxes_encode(
-            labels, bboxes, anchors,
+            labels,
+            bboxes,
+            anchors,
             self.params.num_classes,
             self.params.no_annotation_label,
             ignore_threshold=0.5,
@@ -230,8 +231,12 @@ class SSDNet(object):
             rbboxes = tfe.bboxes_clip(clipping_bbox, rbboxes)
         return rscores, rbboxes
 
-    def losses(self, logits, localisations,
-               gclasses, glocalisations, gscores,
+    def losses(self,
+               logits,
+               localisations,
+               gclasses,
+               glocalisations,
+               gscores,
                match_threshold=0.5,
                negative_ratio=3.,
                alpha=1.,
@@ -239,8 +244,11 @@ class SSDNet(object):
                scope='ssd_losses'):
         """Define the SSD network losses.
         """
-        return ssd_losses(logits, localisations,
-                          gclasses, glocalisations, gscores,
+        return ssd_losses(logits,
+                          localisations,
+                          gclasses,
+                          glocalisations,
+                          gscores,
                           match_threshold=match_threshold,
                           negative_ratio=negative_ratio,
                           alpha=alpha,
@@ -576,8 +584,11 @@ def ssd_arg_scope_caffe(caffe_scope):
 # =========================================================================== #
 # SSD loss function.
 # =========================================================================== #
-def ssd_losses(logits, localisations,
-               gclasses, glocalisations, gscores,
+def ssd_losses(logits,
+               localisations,
+               gclasses,
+               glocalisations,
+               gscores,
                match_threshold=0.5,
                negative_ratio=3.,
                alpha=1.,

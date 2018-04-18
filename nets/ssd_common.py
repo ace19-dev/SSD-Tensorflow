@@ -186,10 +186,14 @@ def tf_ssd_bboxes_encode(labels,
         for i, anchors_layer in enumerate(anchors):
             with tf.name_scope('bboxes_encode_block_%i' % i):
                 t_labels, t_loc, t_scores = \
-                    tf_ssd_bboxes_encode_layer(labels, bboxes, anchors_layer,
-                                               num_classes, no_annotation_label,
+                    tf_ssd_bboxes_encode_layer(labels,
+                                               bboxes,
+                                               anchors_layer,
+                                               num_classes,
+                                               no_annotation_label,
                                                ignore_threshold,
-                                               prior_scaling, dtype)
+                                               prior_scaling,
+                                               dtype)
                 target_labels.append(t_labels)
                 target_localizations.append(t_loc)
                 target_scores.append(t_scores)

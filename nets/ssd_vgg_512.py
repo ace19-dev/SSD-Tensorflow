@@ -163,7 +163,9 @@ class SSDNet(object):
         """Encode labels and bounding boxes.
         """
         return ssd_common.tf_ssd_bboxes_encode(
-            labels, bboxes, anchors,
+            labels,
+            bboxes,
+            anchors,
             self.params.num_classes,
             self.params.no_annotation_label,
             ignore_threshold=0.5,
