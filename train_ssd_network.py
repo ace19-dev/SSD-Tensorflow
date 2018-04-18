@@ -143,7 +143,7 @@ tf.app.flags.DEFINE_string(
     'The name of the train/test split.')
 tf.app.flags.DEFINE_string(
     'dataset_dir',
-    '/home/ace19/dl-data/COCO/fine-tuning_tfrecord/',
+    '../../dl_data/COCO/fine-tuning_tfrecord/',
     'The directory where the dataset files are stored.')
 tf.app.flags.DEFINE_integer(
     'labels_offset',
@@ -168,7 +168,7 @@ tf.app.flags.DEFINE_integer('max_number_of_steps', None,
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
     'checkpoint_path',
-    './checkpoints/tfmodel/model.ckpt-265915',
+    './checkpoints/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt',
     'The path to a checkpoint from which to fine-tune.')
 tf.app.flags.DEFINE_string(
     'checkpoint_model_scope',
@@ -249,8 +249,16 @@ def main(_):
                                                       'object/label',
                                                       'object/bbox'])
             # Pre-processing image, labels and bboxes.
+            # 1.Convert to float scaled [0, 1].
+            # 2.Distort image and bounding boxes. then Resize image to output size.
+            # 3.Randomly flip the image horizontally.
+            # 4.Randomly distort the colors. 4 ways
+            # 5.Rescale to VGG input scale.
+            # 6.Image data format.
             image, glabels, gbboxes = \
-                image_preprocessing_fn(image, glabels, gbboxes,
+                image_preprocessing_fn(image,
+                                       glabels,
+                                       gbboxes,
                                        out_shape=ssd_shape,
                                        data_format=DATA_FORMAT)
             # Encode groundtruth labels and bboxes.
