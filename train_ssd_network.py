@@ -285,8 +285,7 @@ def main(_):
         # Define the model running on every GPU.
         # =================================================================== #
         def clone_fn(batch_queue):
-            """Allows data parallelism by creating multiple
-            clones of network_fn."""
+            """Allows data parallelism by creating multiple clones of network_fn."""
             # Dequeue batch.
             b_image, b_gclasses, b_glocalisations, b_gscores = \
                 tf_utils.reshape_list(batch_queue.dequeue(), batch_shape)
