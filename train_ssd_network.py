@@ -42,7 +42,7 @@ tf.app.flags.DEFINE_float(
 tf.app.flags.DEFINE_string(
     'train_dir', './checkpoints/tfmodel/',
     'Directory where checkpoints and event logs are written to.')
-tf.app.flags.DEFINE_integer('num_clones', 1,
+tf.app.flags.DEFINE_integer('num_clones', 2,
                             'Number of model clones to deploy.')
 tf.app.flags.DEFINE_boolean('clone_on_cpu', False,
                             'Use CPUs to deploy clones.')
@@ -135,7 +135,7 @@ tf.app.flags.DEFINE_string(
     'The name of the dataset to load.')
 tf.app.flags.DEFINE_integer(
     'num_classes',
-    81,
+    2,
     'Number of classes to use in the dataset.')
 tf.app.flags.DEFINE_string(
     'dataset_split_name',
@@ -210,7 +210,8 @@ def main(_):
             clone_on_cpu=FLAGS.clone_on_cpu,
             replica_id=0,
             num_replicas=1,
-            num_ps_tasks=0)
+            num_ps_tasks=0)   # change num_ps_tasks value 1 if it cant be worked on 2 gpu.
+
         # Create global_step.
         with tf.device(deploy_config.variables_device()):
             global_step = slim.create_global_step()
