@@ -242,6 +242,7 @@ class SSDNet(object):
                alpha=1.,
                label_smoothing=0.,
                scope='ssd_losses'):
+
         """Define the SSD network losses.
         """
         return ssd_losses(logits,
@@ -377,7 +378,8 @@ def ssd_anchors_all_layers(img_shape,
     """
     layers_anchors = []
     for i, s in enumerate(layers_shape):
-        anchor_bboxes = ssd_anchor_one_layer(img_shape, s,
+        anchor_bboxes = ssd_anchor_one_layer(img_shape,
+                                             s,
                                              anchor_sizes[i],
                                              anchor_ratios[i],
                                              anchor_steps[i],
@@ -635,6 +637,7 @@ def ssd_losses(logits,
                            predictions[:, 0],
                            1. - fnmask)
         nvalues_flat = tf.reshape(nvalues, [-1])
+
         # Number of negative entries to select.
         max_neg_entries = tf.cast(tf.reduce_sum(fnmask), tf.int32)
         n_neg = tf.cast(negative_ratio * n_positives, tf.int32) + batch_size
@@ -642,6 +645,7 @@ def ssd_losses(logits,
 
         val, idxes = tf.nn.top_k(-nvalues_flat, k=n_neg)
         max_hard_pred = -val[-1]
+
         # Final negative mask.
         nmask = tf.logical_and(nmask, nvalues < max_hard_pred)
         fnmask = tf.cast(nmask, dtype)
