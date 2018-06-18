@@ -288,6 +288,7 @@ def main(_):
         # =================================================================== #
         def clone_fn(batch_queue):
             """Allows data parallelism by creating multiple clones of network_fn."""
+
             # Dequeue batch.
             b_image, b_gclasses, b_glocalisations, b_gscores = \
                 tf_utils.reshape_list(batch_queue.dequeue(), batch_shape)
@@ -298,6 +299,7 @@ def main(_):
             with slim.arg_scope(arg_scope):
                 predictions, localisations, logits, end_points = \
                     ssd_net.net(b_image, is_training=True)
+
             # Add loss function.
             ssd_net.losses(logits, localisations,
                            b_gclasses, b_glocalisations, b_gscores,
@@ -305,6 +307,7 @@ def main(_):
                            negative_ratio=FLAGS.negative_ratio,
                            alpha=FLAGS.loss_alpha,
                            label_smoothing=FLAGS.label_smoothing)
+
             return end_points
 
         # Gather initial summaries.
@@ -368,6 +371,7 @@ def main(_):
             clones,
             optimizer,
             var_list=variables_to_train)
+        
         # Add total_loss to summary.
         summaries.add(tf.summary.scalar('total_loss', total_loss))
 
