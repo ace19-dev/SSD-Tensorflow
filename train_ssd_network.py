@@ -273,6 +273,7 @@ def main(_):
                 batch_size=FLAGS.batch_size,
                 num_threads=FLAGS.num_preprocessing_threads,
                 capacity=5 * FLAGS.batch_size)
+
             b_image, b_gclasses, b_glocalisations, b_gscores = \
                 tf_utils.reshape_list(r, batch_shape)
 
