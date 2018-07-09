@@ -100,9 +100,9 @@ def tf_ssd_bboxes_encode_layer(labels,
     def body(i, feat_labels, feat_scores,
              feat_ymin, feat_xmin, feat_ymax, feat_xmax):
         """Body: update feature labels, scores and bboxes.
-        Follow the original SSD paper for that purpose:
-          - assign values when jaccard > 0.5;
-          - only update if beat the score of other bboxes.
+            Follow the original SSD paper for that purpose:
+              - assign values when jaccard > 0.5;
+              - only update if beat the score of other bboxes.
         """
         # Jaccard score.
         label = labels[i]
@@ -133,6 +133,8 @@ def tf_ssd_bboxes_encode_layer(labels,
 
         return [i+1, feat_labels, feat_scores,
                 feat_ymin, feat_xmin, feat_ymax, feat_xmax]
+
+
     # Main loop definition.
     i = 0
     [i, feat_labels, feat_scores,
@@ -146,11 +148,13 @@ def tf_ssd_bboxes_encode_layer(labels,
     feat_cx = (feat_xmax + feat_xmin) / 2.
     feat_h = feat_ymax - feat_ymin
     feat_w = feat_xmax - feat_xmin
+
     # Encode features.
     feat_cy = (feat_cy - yref) / href / prior_scaling[0]
     feat_cx = (feat_cx - xref) / wref / prior_scaling[1]
     feat_h = tf.log(feat_h / href) / prior_scaling[2]
     feat_w = tf.log(feat_w / wref) / prior_scaling[3]
+
     # Use SSD ordering: x / y / w / h instead of ours.
     feat_localizations = tf.stack([feat_cx, feat_cy, feat_w, feat_h], axis=-1)
     return feat_labels, feat_localizations, feat_scores

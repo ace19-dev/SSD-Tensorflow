@@ -75,7 +75,7 @@ class SSDNet(object):
     """
     default_params = SSDParams(
         img_shape=(512, 512),
-        num_classes=21,
+        num_classes=2,
         no_annotation_label=21,
         feat_layers=['block4', 'block7', 'block8', 'block9', 'block10', 'block11', 'block12'],
         feat_shapes=[(64, 64), (32, 32), (16, 16), (8, 8), (4, 4), (2, 2), (1, 1)],
@@ -158,6 +158,7 @@ class SSDNet(object):
                                       self.params.anchor_offset,
                                       dtype)
 
+    # Encode groundtruth labels and bboxes.
     def bboxes_encode(self, labels, bboxes, anchors,
                       scope=None):
         """Encode labels and bounding boxes.

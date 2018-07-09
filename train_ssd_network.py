@@ -42,7 +42,7 @@ tf.app.flags.DEFINE_float(
 tf.app.flags.DEFINE_string(
     'train_dir', './checkpoints/tfmodel/',
     'Directory where checkpoints and event logs are written to.')
-tf.app.flags.DEFINE_integer('num_clones', 2,
+tf.app.flags.DEFINE_integer('num_clones', 1,
                             'Number of model clones to deploy.')
 tf.app.flags.DEFINE_boolean('clone_on_cpu', False,
                             'Use CPUs to deploy clones.')
@@ -71,7 +71,7 @@ tf.app.flags.DEFINE_float(
 tf.app.flags.DEFINE_float(
     'weight_decay', 0.00004, 'The weight decay on the model weights.')
 tf.app.flags.DEFINE_string(
-    'optimizer', 'sgd',
+    'optimizer', 'momentum',
     'The name of the optimizer, one of "adadelta", "adagrad", "adam",'
     '"ftrl", "momentum", "sgd" or "rmsprop".')
 tf.app.flags.DEFINE_float(
@@ -110,7 +110,7 @@ tf.app.flags.DEFINE_string(
     'exponential',
     'Specifies how the learning rate is decayed. One of "fixed", "exponential",'
     ' or "polynomial"')
-tf.app.flags.DEFINE_float('learning_rate', 0.0001, 'Initial learning rate.')
+tf.app.flags.DEFINE_float('learning_rate', 0.00005, 'Initial learning rate.')
 tf.app.flags.DEFINE_float(
     'end_learning_rate', 0.000001,
     'The minimal end learning rate used by a polynomial decay learning rate.')
@@ -131,11 +131,11 @@ tf.app.flags.DEFINE_float(
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
     'dataset_name',
-    'coco_2017',
+    'MOT17',
     'The name of the dataset to load.')
 tf.app.flags.DEFINE_integer(
     'num_classes',
-    2,
+    1 + 1,
     'Number of classes to use in the dataset.')
 tf.app.flags.DEFINE_string(
     'dataset_split_name',
@@ -143,7 +143,7 @@ tf.app.flags.DEFINE_string(
     'The name of the train/test split.')
 tf.app.flags.DEFINE_string(
     'dataset_dir',
-    '../../dl_data/COCO/fine-tuning_tfrecord/',
+    '/home/ace19/training/MOT_ssd_inception_v2_coco/data/tfrecord/',
     'The directory where the dataset files are stored.')
 tf.app.flags.DEFINE_integer(
     'labels_offset',
@@ -152,12 +152,12 @@ tf.app.flags.DEFINE_integer(
     'evaluate the VGG and ResNet architectures which do not use a background '
     'class for the ImageNet dataset.')
 tf.app.flags.DEFINE_string(
-    'model_name', 'ssd_300_vgg', 'The name of the architecture to train.')
+    'model_name', 'ssd_512_vgg', 'The name of the architecture to train.')
 tf.app.flags.DEFINE_string(
     'preprocessing_name', None, 'The name of the preprocessing to use. If left '
     'as `None`, then the model_name flag is used.')
 tf.app.flags.DEFINE_integer(
-    'batch_size', 32, 'The number of samples in each batch.')
+    'batch_size', 8, 'The number of samples in each batch.')
 tf.app.flags.DEFINE_integer(
     'train_image_size', None, 'Train image size')
 tf.app.flags.DEFINE_integer('max_number_of_steps', None,
@@ -168,7 +168,7 @@ tf.app.flags.DEFINE_integer('max_number_of_steps', None,
 # =========================================================================== #
 tf.app.flags.DEFINE_string(
     'checkpoint_path',
-    './checkpoints/VGG_VOC0712_SSD_300x300_ft_iter_120000.ckpt',
+    './checkpoints/VGG_VOC0712_SSD_512x512_ft_iter_120000.ckpt',
     'The path to a checkpoint from which to fine-tune.')
 tf.app.flags.DEFINE_string(
     'checkpoint_model_scope',
@@ -176,9 +176,10 @@ tf.app.flags.DEFINE_string(
     'Model scope in the checkpoint. None if the same as the trained model.')
 tf.app.flags.DEFINE_string(
     'checkpoint_exclude_scopes',
-    'ssd_300_vgg/block4_box, ssd_300_vgg/block7_box, \
-     ssd_300_vgg/block8_box, ssd_300_vgg/block9_box, \
-     ssd_300_vgg/block10_box, ssd_300_vgg/block11_box',
+    'ssd_512_vgg/block4_box, ssd_512_vgg/block7_box, \
+     ssd_512_vgg/block8_box, ssd_512_vgg/block9_box, \
+     ssd_512_vgg/block10_box, ssd_512_vgg/block11_box, \
+     ssd_512_vgg/block12_box',
     'Comma-separated list of scopes of variables to exclude when restoring '
     'from a checkpoint.')
 tf.app.flags.DEFINE_string(
@@ -217,8 +218,9 @@ def main(_):
             global_step = slim.create_global_step()
 
         # Select the dataset.
-        dataset = dataset_factory.get_dataset(
-            FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir)
+        dataset = dataset_factory.get_dataset(FLAGS.dataset_name,
+                                              FLAGS.dataset_split_name,
+                                              FLAGS.dataset_dir)
 
         # Get the SSD network and its anchors.
         ssd_class = nets_factory.get_network(FLAGS.model_name)
