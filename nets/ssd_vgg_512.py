@@ -516,14 +516,17 @@ def ssd_arg_scope_caffe(caffe_scope):
 # =========================================================================== #
 # SSD loss function.
 # =========================================================================== #
-def ssd_losses(logits, localisations,
-               gclasses, glocalisations, gscores,
+def ssd_losses(logits,
+               localisations,
+               gclasses,
+               glocalisations,
+               gscores,
                match_threshold=0.5,
                negative_ratio=3.,
                alpha=1.,
                label_smoothing=0.,
                scope=None):
-    """Loss functions for training the SSD 300 VGG network.
+    """Loss functions for training the SSD 512 VGG network.
 
     This function defines the different loss components of the SSD, and
     adds them to the TF loss collection.
