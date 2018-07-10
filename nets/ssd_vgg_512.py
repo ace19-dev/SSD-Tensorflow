@@ -567,18 +567,18 @@ def ssd_losses(logits,
 
         # Hard negative mining...
         no_classes = tf.cast(pmask, tf.int32)
+
         predictions = slim.softmax(logits)
-        nmask = tf.logical_and(tf.logical_not(pmask),
-                               gscores > -0.5)
+        # nmask = tf.logical_and(tf.logical_not(pmask), gscores > -0.5)
+        nmask = tf.logical_not(pmask)
         fnmask = tf.cast(nmask, dtype)
-        nvalues = tf.where(nmask,
-                           predictions[:, 0],
-                           1. - fnmask)
+        nvalues = tf.where(nmask, predictions[:, 0], 1. - fnmask)
         nvalues_flat = tf.reshape(nvalues, [-1])
 
         # Number of negative entries to select.
         max_neg_entries = tf.cast(tf.reduce_sum(fnmask), tf.int32)
-        n_neg = tf.cast(negative_ratio * n_positives, tf.int32) + batch_size
+        # n_neg = tf.cast(negative_ratio * n_positives, tf.int32) + batch_size
+        n_neg = tf.cast(negative_ratio * n_positives, tf.int32)
         n_neg = tf.minimum(n_neg, max_neg_entries)
 
         val, idxes = tf.nn.top_k(-nvalues_flat, k=n_neg)
@@ -592,21 +592,28 @@ def ssd_losses(logits,
         with tf.name_scope('cross_entropy_pos'):
             loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits,
                                                                   labels=gclasses)
-            loss = tf.div(tf.reduce_sum(loss * fpmask), batch_size, name='value')
+            # loss = tf.div(tf.reduce_sum(loss * fpmask), batch_size, name='value')
+            loss = tf.div(tf.reduce_sum(loss * fpmask), n_positives, name='value')
             tf.losses.add_loss(loss)
 
         with tf.name_scope('cross_entropy_neg'):
             loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits,
                                                                   labels=no_classes)
-            loss = tf.div(tf.reduce_sum(loss * fnmask), batch_size, name='value')
+            # loss = tf.div(tf.reduce_sum(loss * fnmask), batch_size, name='value')
+            loss = tf.div(tf.reduce_sum(loss * fnmask), n_positives, name='value')
             tf.losses.add_loss(loss)
 
         # Add localization loss: smooth L1, L2, ...
         with tf.name_scope('localization'):
             # Weights Tensor: positive mask + random negative.
-            weights = tf.expand_dims(alpha * fpmask, axis=-1)
-            loss = custom_layers.abs_smooth(localisations - glocalisations)
-            loss = tf.div(tf.reduce_sum(loss * weights), batch_size, name='value')
+            # weights = tf.expand_dims(alpha * fpmask, axis=-1)
+            # loss = custom_layers.abs_smooth(localisations - glocalisations)
+            # # loss = tf.div(tf.reduce_sum(loss * weights), batch_size, name='value')
+            # loss = tf.div(tf.reduce_sum(loss * weights), n_positives, name='value')
+            # weights = tf.expand_dims(alpha * fpmask, axis=-1)
+            loss = tf.reduce_sum(custom_layers.abs_smooth(localisations - glocalisations), axis=1)
+            # loss = tf.div(tf.reduce_sum(loss * weights), batch_size, name='value')
+            loss = tf.div(tf.reduce_sum(loss * fpmask) * alpha, n_positives, name='value')
             tf.losses.add_loss(loss)
 
 

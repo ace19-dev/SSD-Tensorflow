@@ -115,9 +115,14 @@ def ssd_bboxes_select(predictions_net,
     # l_layers = []
     # l_idxes = []
     for i in range(len(predictions_net)):
-        classes, scores, bboxes = ssd_bboxes_select_layer(
-            predictions_net[i], localizations_net[i], anchors_net[i],
-            select_threshold, img_shape, num_classes, decode)
+        classes, scores, bboxes = \
+            ssd_bboxes_select_layer(predictions_net[i],
+                                    localizations_net[i],
+                                    anchors_net[i],
+                                    select_threshold,
+                                    img_shape,
+                                    num_classes,
+                                    decode)
         l_classes.append(classes)
         l_scores.append(scores)
         l_bboxes.append(bboxes)
