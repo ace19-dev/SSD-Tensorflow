@@ -22,6 +22,8 @@ from nets import nets_factory
 from preprocessing import preprocessing_factory
 import tf_utils
 
+from tensorflow.python import debug as tf_debug
+
 slim = tf.contrib.slim
 
 DATA_FORMAT = 'NCHW'
@@ -418,6 +420,7 @@ def main(_):
             saver=saver,
             save_interval_secs=FLAGS.save_interval_secs,
             session_config=config,
+            # session_wrapper=tf_debug.LocalCLIDebugWrapperSession,
             sync_optimizer=None)
 
 
