@@ -588,6 +588,7 @@ def ssd_losses(logits,
         nmask = tf.logical_and(nmask, nvalues < max_hard_pred)
         fnmask = tf.cast(nmask, dtype)
 
+        # multibox_loss = confidence_loss + alpha * location_loss
         # Add cross-entropy loss.
         with tf.name_scope('cross_entropy_pos'):
             loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits,
