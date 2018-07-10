@@ -567,7 +567,6 @@ def ssd_losses(logits,
 
         # Hard negative mining...
         no_classes = tf.cast(pmask, tf.int32)
-
         predictions = slim.softmax(logits)
         # nmask = tf.logical_and(tf.logical_not(pmask), gscores > -0.5)
         nmask = tf.logical_not(pmask)
@@ -580,6 +579,7 @@ def ssd_losses(logits,
         # n_neg = tf.cast(negative_ratio * n_positives, tf.int32) + batch_size
         n_neg = tf.cast(negative_ratio * n_positives, tf.int32)
         n_neg = tf.minimum(n_neg, max_neg_entries)
+        n_negative = tf.cast(n_neg, dtype)
 
         val, idxes = tf.nn.top_k(-nvalues_flat, k=n_neg)
         max_hard_pred = -val[-1]
@@ -600,7 +600,7 @@ def ssd_losses(logits,
             loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits,
                                                                   labels=no_classes)
             # loss = tf.div(tf.reduce_sum(loss * fnmask), batch_size, name='value')
-            loss = tf.div(tf.reduce_sum(loss * fnmask), n_positives, name='value')
+            loss = tf.div(tf.reduce_sum(loss * fnmask), n_negative, name='value')
             tf.losses.add_loss(loss)
 
         # Add localization loss: smooth L1, L2, ...
