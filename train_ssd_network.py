@@ -145,7 +145,7 @@ tf.app.flags.DEFINE_string(
     'The name of the train/test split.')
 tf.app.flags.DEFINE_string(
     'dataset_dir',
-    '/home/ace19/training/MOT_ssd_inception_v2_coco/data/tfrecord/',
+    '/home/acemc19/dl_data/MOT/MOT17/tfrecord/',
     'The directory where the dataset files are stored.')
 tf.app.flags.DEFINE_integer(
     'labels_offset',
@@ -420,8 +420,9 @@ def main(_):
             saver=saver,
             save_interval_secs=FLAGS.save_interval_secs,
             session_config=config,
-            # session_wrapper=tf_debug.LocalCLIDebugWrapperSession,
+            # session_wrapper=tf_debug.TensorBoardDebugWrapperSession,
             sync_optimizer=None)
+
 
 
 if __name__ == '__main__':
