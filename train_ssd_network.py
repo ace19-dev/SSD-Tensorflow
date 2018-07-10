@@ -69,9 +69,9 @@ tf.app.flags.DEFINE_float(
 # Optimization Flags.
 # =========================================================================== #
 tf.app.flags.DEFINE_float(
-    'weight_decay', 0.00004, 'The weight decay on the model weights.')
+    'weight_decay', 0.0005, 'The weight decay on the model weights.')
 tf.app.flags.DEFINE_string(
-    'optimizer', 'momentum',
+    'optimizer', 'sgd',
     'The name of the optimizer, one of "adadelta", "adagrad", "adam",'
     '"ftrl", "momentum", "sgd" or "rmsprop".')
 tf.app.flags.DEFINE_float(
@@ -110,16 +110,16 @@ tf.app.flags.DEFINE_string(
     'exponential',
     'Specifies how the learning rate is decayed. One of "fixed", "exponential",'
     ' or "polynomial"')
-tf.app.flags.DEFINE_float('learning_rate', 0.00002, 'Initial learning rate.')
+tf.app.flags.DEFINE_float('learning_rate', 0.0001, 'Initial learning rate.')
 tf.app.flags.DEFINE_float(
-    'end_learning_rate', 0.000001,
+    'end_learning_rate', 0.00001,
     'The minimal end learning rate used by a polynomial decay learning rate.')
 tf.app.flags.DEFINE_float(
     'label_smoothing', 0.0, 'The amount of label smoothing.')
 tf.app.flags.DEFINE_float(
-    'learning_rate_decay_factor', 0.94, 'Learning rate decay factor.')
+    'learning_rate_decay_factor', 0.1, 'Learning rate decay factor.')
 tf.app.flags.DEFINE_float(
-    'num_epochs_per_decay', 2.0,
+    'num_epochs_per_decay', 40.0,
     'Number of epochs after which learning rate decays.')
 tf.app.flags.DEFINE_float(
     'moving_average_decay', None,
@@ -157,7 +157,7 @@ tf.app.flags.DEFINE_string(
     'preprocessing_name', None, 'The name of the preprocessing to use. If left '
     'as `None`, then the model_name flag is used.')
 tf.app.flags.DEFINE_integer(
-    'batch_size', 8, 'The number of samples in each batch.')
+    'batch_size', 16, 'The number of samples in each batch.')
 tf.app.flags.DEFINE_integer(
     'train_image_size', None, 'Train image size')
 tf.app.flags.DEFINE_integer('max_number_of_steps', None,
@@ -184,7 +184,11 @@ tf.app.flags.DEFINE_string(
     'from a checkpoint.')
 tf.app.flags.DEFINE_string(
     'trainable_scopes',
-    None,
+    'ssd_512_vgg/block4_box, ssd_512_vgg/block7_box, \
+     ssd_512_vgg/block8_box, ssd_512_vgg/block9_box, \
+     ssd_512_vgg/block10_box, ssd_512_vgg/block11_box, \
+     ssd_512_vgg/block12_box',
+    # None,
     'Comma-separated list of scopes to filter the set of variables to train.'
     'By default, None would train all the variables.')
 tf.app.flags.DEFINE_boolean(

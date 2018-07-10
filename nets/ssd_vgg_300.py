@@ -672,8 +672,11 @@ def ssd_losses(logits,
             tf.losses.add_loss(loss)
 
 
-def ssd_losses_old(logits, localisations,
-                   gclasses, glocalisations, gscores,
+def ssd_losses_old(logits,
+                   localisations,
+                   gclasses,
+                   glocalisations,
+                   gscores,
                    match_threshold=0.5,
                    negative_ratio=3.,
                    alpha=1.,
