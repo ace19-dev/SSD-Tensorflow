@@ -54,7 +54,7 @@ with slim.arg_scope(ssd_net.arg_scope(data_format=data_format)):
 
 # Restore SSD model.
 # ckpt_filename = './checkpoints/ssd_300_vgg.ckpt'
-ckpt_filename = './checkpoints/tfmodel/VGG_VOC0712_SSD_512x512_ft_iter_120000.ckpt'
+ckpt_filename = './checkpoints/VGG_VOC0712_SSD_512x512_ft_iter_120000.ckpt'
 # ckpt_filename = './checkpoints/tfmodel/model.ckpt-126244'
 isess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
@@ -95,7 +95,7 @@ if dataset_utils.has_labels(dataset_dir):
     labels_to_names = dataset_utils.read_label_file2(dataset_dir)
 
 # Test on some demo image and visualize output.
-path = '/home/ace19/dl_data/MOT/MOT17/test/sample/'
+path = '/home/acemc19/dl_data/MOT/MOT17/test/sample/'
 # path = './detection_image/coco/'
 image_names = sorted(os.listdir(path))
 
