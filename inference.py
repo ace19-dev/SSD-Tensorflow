@@ -96,7 +96,7 @@ if dataset_utils.has_labels(dataset_dir):
     labels_to_names = dataset_utils.read_label_file2(dataset_dir, filename='labels_voc.txt')
 
 # Test on some demo image and visualize output.
-path = '/home/acemc19/dl_data/MOT/MOT17/test/sample/'
+path = '/home/ace19/dl_data/MOT/MOT17/test/sample-test/'
 # path = './detection_image/coco/'
 image_names = sorted(os.listdir(path))
 
