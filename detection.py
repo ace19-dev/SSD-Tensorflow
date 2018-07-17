@@ -1,6 +1,7 @@
 import os
 import math
 import random
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -54,7 +55,7 @@ with slim.arg_scope(ssd_net.arg_scope(data_format=data_format)):
 
 # Restore SSD model.
 # ckpt_filename = './checkpoints/ssd_300_vgg.ckpt'
-ckpt_filename = './checkpoints/tfmodel/VGG_VOC0712_SSD_512x512_ft_iter_120000.ckpt'
+ckpt_filename = './checkpoints/VGG_VOC0712_SSD_512x512_ft_iter_120000.ckpt'
 # ckpt_filename = './checkpoints/tfmodel/model.ckpt-126244'
 isess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
@@ -78,7 +79,7 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(512, 
                                      ssd_anchors,
                                      select_threshold=select_threshold,
                                      img_shape=net_shape,
-                                     num_classes=2,
+                                     num_classes=21,
                                      decode=True)
 
     rbboxes = np_methods.bboxes_clip(rbbox_img, rbboxes)
@@ -92,7 +93,7 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(512, 
 dataset_dir = os.path.join(os.getcwd(), 'datasets')
 labels_to_names = None
 if dataset_utils.has_labels(dataset_dir):
-    labels_to_names = dataset_utils.read_label_file2(dataset_dir)
+    labels_to_names = dataset_utils.read_label_file2(dataset_dir, filename='labels_voc.txt')
 
 # Test on some demo image and visualize output.
 path = '/home/ace19/dl_data/MOT/MOT17/test/sample/'
@@ -102,7 +103,12 @@ image_names = sorted(os.listdir(path))
 for image in image_names:
     img = mpimg.imread(path + image)
     # img = mpimg.imread(path + image_names[-5])
+
+    start_time = time.time()
+
     rclasses, rscores, rbboxes =  process_image(img)
+
+    print('Speed %.3f sec' % (time.time() - start_time))
 
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
     visualization.plt_bboxes(img, rclasses, rscores, rbboxes, labels_to_names)

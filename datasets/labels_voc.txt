@@ -1,21 +1,20 @@
-'none': (0, 'Background'),
-'aeroplane': (1, 'Vehicle'),
-'bicycle': (2, 'Vehicle'),
-'bird': (3, 'Animal'),
-'boat': (4, 'Vehicle'),
-'bottle': (5, 'Indoor'),
-'bus': (6, 'Vehicle'),
-'car': (7, 'Vehicle'),
-'cat': (8, 'Animal'),
-'chair': (9, 'Indoor'),
-'cow': (10, 'Animal'),
-'diningtable': (11, 'Indoor'),
-'dog': (12, 'Animal'),
-'horse': (13, 'Animal'),
-'motorbike': (14, 'Vehicle'),
-'person': (15, 'Person'),
-'pottedplant': (16, 'Indoor'),
-'sheep': (17, 'Animal'),
-'sofa': (18, 'Indoor'),
-'train': (19, 'Vehicle'),
-'tvmonitor': (20, 'Indoor')
+1:aeroplane
+2:bicycle
+3:bird
+4:boat
+5:bottle
+6:bus
+7:car
+8:cat
+9:chair
+10:cow
+11:diningtable
+12:dog
+13:horse
+14:motorbike
+15:person
+16:pottedplant
+17:sheep
+18:sofa
+19:train
+20:tvmonitor
